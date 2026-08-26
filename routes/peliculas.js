@@ -10,6 +10,10 @@ const camposObligatorios = ['titulo', 'genero', 'horario', 'sala'];
 function validarPelicula(datos) {
   const errores = [];
 
+  if (datos === null || typeof datos !== 'object' || Array.isArray(datos)) {
+    return ['El cuerpo de la solicitud debe ser un objeto JSON válido.'];
+  }
+
   camposObligatorios.forEach((campo) => {
     if (typeof datos[campo] !== 'string' || datos[campo].trim() === '') {
       errores.push(`El campo ${campo} es obligatorio.`);
@@ -36,6 +40,10 @@ function validarPelicula(datos) {
     errores.push('precioEntrada debe ser un número positivo.');
   }
 
+  if (Object.prototype.hasOwnProperty.call(datos, 'cartelera') && typeof datos.cartelera !== 'boolean') {
+    errores.push('cartelera debe ser un valor booleano (true o false).');
+  }
+
   return errores;
 }
 
@@ -48,7 +56,7 @@ function normalizarPelicula(datos, id, cartelera = true) {
     horario: datos.horario.trim(),
     sala: datos.sala.trim(),
     precioEntrada: Number(datos.precioEntrada),
-    cartelera: datos.cartelera === undefined ? cartelera : Boolean(datos.cartelera),
+    cartelera: datos.cartelera === undefined ? cartelera : datos.cartelera,
   };
 }
 
@@ -67,6 +75,10 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', (req, res) => {
+  if (req.body === null || typeof req.body !== 'object' || Array.isArray(req.body)) {
+    return res.status(400).json({ mensaje: 'El cuerpo de la solicitud debe ser un objeto JSON válido.' });
+  }
+
   const errores = validarPelicula(req.body);
 
   if (errores.length > 0) {
@@ -85,6 +97,10 @@ router.put('/:id', (req, res) => {
 
   if (indice === -1) {
     return res.status(404).json({ mensaje: 'Película no encontrada.' });
+  }
+
+  if (req.body === null || typeof req.body !== 'object' || Array.isArray(req.body)) {
+    return res.status(400).json({ mensaje: 'El cuerpo de la solicitud debe ser un objeto JSON válido.' });
   }
 
   const errores = validarPelicula(req.body);

@@ -16,14 +16,49 @@ async function obtenerPeliculas() {
 }
 
 function mostrarPeliculas(peliculas) {
-  peliculasBody.innerHTML = peliculas.map((pelicula) => `
-    <tr>
-      <td>${pelicula.titulo}</td><td>${pelicula.genero}</td><td>${pelicula.duracionMinutos} min</td>
-      <td>${pelicula.horario}</td><td>${pelicula.sala}</td><td>$${pelicula.precioEntrada.toFixed(2)}</td>
-      <td><span class="badge ${pelicula.cartelera ? 'badge-active' : 'badge-inactive'}">${pelicula.cartelera ? 'En cartelera' : 'Fuera'}</span></td>
-      <td class="actions"><button type="button" class="button-small edit-button" data-id="${pelicula.id}">Editar</button><button type="button" class="button-small delete-button" data-id="${pelicula.id}">Eliminar</button></td>
-    </tr>
-  `).join('');
+  peliculasBody.replaceChildren();
+
+  peliculas.forEach((pelicula) => {
+    const fila = document.createElement('tr');
+    const valores = [
+      pelicula.titulo,
+      pelicula.genero,
+      `${pelicula.duracionMinutos} min`,
+      pelicula.horario,
+      pelicula.sala,
+      `$${pelicula.precioEntrada.toFixed(2)}`,
+    ];
+
+    valores.forEach((valor) => {
+      const celda = document.createElement('td');
+      celda.textContent = valor;
+      fila.append(celda);
+    });
+
+    const estadoCelda = document.createElement('td');
+    const estado = document.createElement('span');
+    estado.className = `badge ${pelicula.cartelera ? 'badge-active' : 'badge-inactive'}`;
+    estado.textContent = pelicula.cartelera ? 'En cartelera' : 'Fuera';
+    estadoCelda.append(estado);
+    fila.append(estadoCelda);
+
+    const acciones = document.createElement('td');
+    acciones.className = 'actions';
+    const editar = document.createElement('button');
+    editar.type = 'button';
+    editar.className = 'button-small edit-button';
+    editar.dataset.id = pelicula.id;
+    editar.textContent = 'Editar';
+    const eliminar = document.createElement('button');
+    eliminar.type = 'button';
+    eliminar.className = 'button-small delete-button';
+    eliminar.dataset.id = pelicula.id;
+    eliminar.textContent = 'Eliminar';
+    acciones.append(editar, eliminar);
+    fila.append(acciones);
+    peliculasBody.append(fila);
+  });
+
   emptyState.hidden = peliculas.length > 0;
   movieCount.textContent = `${peliculas.length} ${peliculas.length === 1 ? 'película' : 'películas'}`;
 }
