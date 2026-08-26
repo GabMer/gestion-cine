@@ -106,15 +106,10 @@ function mostrarEntradas(entradas) {
   entradasBody.replaceChildren();
 
   entradas.forEach((entrada) => {
-    const pelicula = peliculasTodas.find(
-      (item) => item.id === entrada.peliculaId
-    );
     const fila = document.createElement('tr');
     const valores = [
       entrada.cliente,
-      pelicula
-        ? pelicula.titulo
-        : entrada.tituloPelicula || `Película #${entrada.peliculaId}`,
+      entrada.tituloPelicula || `Película #${entrada.peliculaId}`,
       entrada.cantidad,
       `$${entrada.precioUnitario.toFixed(2)}`,
       `$${entrada.total.toFixed(2)}`,

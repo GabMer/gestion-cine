@@ -28,12 +28,9 @@ router.get('/', (req, res) => {
   const recaudacionPorPelicula = new Map();
 
   for (const entrada of entradas) {
-    const pelicula = peliculasPorId.get(entrada.peliculaId);
     const actual = recaudacionPorPelicula.get(entrada.peliculaId) || {
       peliculaId: entrada.peliculaId,
-      titulo: pelicula
-        ? pelicula.titulo
-        : entrada.tituloPelicula || `Película #${entrada.peliculaId}`,
+      titulo: entrada.tituloPelicula || `Película #${entrada.peliculaId}`,
       monto: 0,
       cantidadEntradas: 0,
     };
