@@ -5,6 +5,7 @@ const router = express.Router();
 
 let entradas = [];
 let siguienteId = 1;
+const CANTIDAD_MAXIMA = 50;
 
 function validarEntrada(datos) {
   const errores = [];
@@ -32,9 +33,10 @@ function validarEntrada(datos) {
     datos.cantidad === null ||
     datos.cantidad === '' ||
     !Number.isInteger(Number(datos.cantidad)) ||
-    Number(datos.cantidad) <= 0
+    Number(datos.cantidad) <= 0 ||
+    Number(datos.cantidad) > CANTIDAD_MAXIMA
   ) {
-    errores.push('cantidad debe ser un número entero positivo.');
+    errores.push(`cantidad debe ser un número entero positivo entre 1 y ${CANTIDAD_MAXIMA}.`);
   }
 
   return errores;
@@ -64,13 +66,19 @@ router.post('/', (req, res) => {
   }
 
   const cantidad = Number(req.body.cantidad);
+  const total = Number((cantidad * pelicula.precioEntrada).toFixed(2));
+
+  if (!Number.isFinite(total)) {
+    return res.status(400).json({ mensaje: 'El total de la entrada no es un monto válido.' });
+  }
+
   const entrada = {
     id: siguienteId,
     cliente: req.body.cliente.trim(),
     peliculaId: pelicula.id,
     cantidad,
     precioUnitario: pelicula.precioEntrada,
-    total: cantidad * pelicula.precioEntrada,
+    total,
     fecha: new Date().toISOString(),
   };
 

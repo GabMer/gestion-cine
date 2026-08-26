@@ -15,6 +15,7 @@ const entradasBody = document.querySelector('#entradas-body');
 const entradasEmptyState = document.querySelector('#entradas-empty-state');
 const ticketCount = document.querySelector('#ticket-count');
 
+let peliculasTodas = [];
 let peliculasDisponibles = [];
 
 const fields = ['titulo', 'genero', 'duracionMinutos', 'horario', 'sala', 'precioEntrada', 'cartelera'];
@@ -43,7 +44,8 @@ function actualizarTotalEntrada() {
 }
 
 function actualizarSelectorPeliculas(peliculas) {
-  peliculasDisponibles = peliculas.filter((pelicula) => pelicula.cartelera === true);
+  peliculasTodas = peliculas;
+  peliculasDisponibles = peliculasTodas.filter((pelicula) => pelicula.cartelera === true);
   entradaPelicula.replaceChildren(new Option('Seleccioná una película', ''));
 
   peliculasDisponibles.forEach((pelicula) => {
@@ -58,7 +60,7 @@ function mostrarEntradas(entradas) {
   entradasBody.replaceChildren();
 
   entradas.forEach((entrada) => {
-    const pelicula = peliculasDisponibles.find((item) => item.id === entrada.peliculaId);
+    const pelicula = peliculasTodas.find((item) => item.id === entrada.peliculaId);
     const fila = document.createElement('tr');
     const valores = [
       entrada.cliente,
@@ -87,7 +89,8 @@ function mostrarEntradas(entradas) {
   });
 
   entradasEmptyState.hidden = entradas.length > 0;
-  ticketCount.textContent = `${entradas.length} ${entradas.length === 1 ? 'entrada' : 'entradas'}`;
+  const cantidadTotal = entradas.reduce((total, entrada) => total + entrada.cantidad, 0);
+  ticketCount.textContent = `${cantidadTotal} ${cantidadTotal === 1 ? 'entrada' : 'entradas'}`;
 }
 
 async function listarEntradas() {
@@ -200,6 +203,7 @@ async function guardarPelicula(event) {
   limpiarFormulario();
   mostrarMensaje(id ? 'Película actualizada correctamente.' : 'Película agregada correctamente.', false);
   await listarPeliculas();
+  await listarEntradas();
 }
 
 async function editarPelicula(id) {
@@ -220,6 +224,7 @@ async function eliminarPelicula(id) {
   const response = await fetch(`/api/peliculas/${id}`, { method: 'DELETE' });
   if (!response.ok) throw new Error('No se pudo eliminar la película.');
   await listarPeliculas();
+  await listarEntradas();
 }
 
 async function guardarEntrada(event) {
