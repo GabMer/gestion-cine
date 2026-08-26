@@ -130,4 +130,6 @@ router.delete('/:id', (req, res) => {
   res.json({ mensaje: 'Película eliminada correctamente.', pelicula: peliculaEliminada });
 });
 
+router.obtenerPeliculas = () => peliculas;
+
 module.exports = router;
