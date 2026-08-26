@@ -106,11 +106,10 @@ function mostrarEntradas(entradas) {
   entradasBody.replaceChildren();
 
   entradas.forEach((entrada) => {
-    const pelicula = peliculasTodas.find((item) => item.id === entrada.peliculaId);
     const fila = document.createElement('tr');
     const valores = [
       entrada.cliente,
-      pelicula ? pelicula.titulo : `Película #${entrada.peliculaId}`,
+      entrada.tituloPelicula || `Película #${entrada.peliculaId}`,
       entrada.cantidad,
       `$${entrada.precioUnitario.toFixed(2)}`,
       `$${entrada.total.toFixed(2)}`,
@@ -151,6 +150,7 @@ async function cargarDatosIniciales() {
   try {
     await listarPeliculas();
     await listarEntradas();
+    await cargarDashboard();
   } catch (error) {
     mostrarMensajeEntrada(error.message);
   }
@@ -272,6 +272,7 @@ async function eliminarPelicula(id) {
   if (!response.ok) throw new Error('No se pudo eliminar la película.');
   await listarPeliculas();
   await listarEntradas();
+  await cargarDashboard();
 }
 
 async function guardarEntrada(event) {
@@ -296,6 +297,7 @@ async function guardarEntrada(event) {
   actualizarTotalEntrada();
   mostrarMensajeEntrada('Venta registrada correctamente.', false);
   await listarEntradas();
+  await cargarDashboard();
 }
 
 async function eliminarEntrada(id) {
@@ -308,6 +310,7 @@ async function eliminarEntrada(id) {
   }
 
   await listarEntradas();
+  await cargarDashboard();
 }
 
 form.addEventListener('submit', (event) => guardarPelicula(event).catch((error) => mostrarMensaje(error.message)));

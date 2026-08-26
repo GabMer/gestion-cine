@@ -76,6 +76,7 @@ router.post('/', (req, res) => {
     id: siguienteId,
     cliente: req.body.cliente.trim(),
     peliculaId: pelicula.id,
+    tituloPelicula: pelicula.titulo,
     cantidad,
     precioUnitario: pelicula.precioEntrada,
     total,

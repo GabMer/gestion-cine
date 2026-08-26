@@ -1,13 +1,10 @@
 const express = require('express');
-const peliculasRouter = require('./peliculas');
 const entradasRouter = require('./entradas');
 
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  const peliculas = peliculasRouter.obtenerPeliculas();
   const entradas = entradasRouter.obtenerEntradas();
-  const peliculasPorId = new Map(peliculas.map((pelicula) => [pelicula.id, pelicula]));
 
   const recaudacionTotal = Number(
     entradas.reduce((total, entrada) => total + entrada.total, 0).toFixed(2)
@@ -19,10 +16,9 @@ router.get('/', (req, res) => {
   const recaudacionPorPelicula = new Map();
 
   entradas.forEach((entrada) => {
-    const pelicula = peliculasPorId.get(entrada.peliculaId);
     const actual = recaudacionPorPelicula.get(entrada.peliculaId) || {
       peliculaId: entrada.peliculaId,
-      titulo: pelicula ? pelicula.titulo : `Película #${entrada.peliculaId}`,
+      titulo: entrada.tituloPelicula || `Película #${entrada.peliculaId}`,
       monto: 0,
       cantidadEntradas: 0,
     };
