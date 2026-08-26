@@ -24,7 +24,52 @@
         </div>
       </header>
 
-      <section class="panel" aria-labelledby="peliculas-heading">
+      <nav class="section-nav" aria-label="Secciones principales">
+        <a href="#dashboard" class="nav-link" data-section="dashboard">Dashboard</a>
+        <a href="#peliculas-heading" class="nav-link">Películas</a>
+        <a href="#entradas-heading" class="nav-link">Entradas</a>
+      </nav>
+
+      <section id="dashboard" class="panel dashboard-panel" aria-labelledby="dashboard-heading">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Resumen</p>
+            <h2 id="dashboard-heading">Dashboard</h2>
+          </div>
+          <span id="dashboard-updated" class="section-heading__hint">Sin datos cargados</span>
+        </div>
+
+        <div class="dashboard-cards">
+          <article class="stat-card">
+            <span>Recaudación total</span>
+            <strong id="dashboard-recaudacion">$0.00</strong>
+          </article>
+          <article class="stat-card">
+            <span>Entradas vendidas</span>
+            <strong id="dashboard-entradas">0</strong>
+          </article>
+          <article class="stat-card">
+            <span>Más entradas vendidas</span>
+            <strong id="dashboard-top-pelicula">Sin ventas</strong>
+          </article>
+        </div>
+
+        <div class="section-heading dashboard-table-heading">
+          <h3>Recaudación por película</h3>
+        </div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr><th>Película</th><th>Entradas</th><th>Recaudación</th></tr>
+            </thead>
+            <tbody id="dashboard-body"></tbody>
+          </table>
+          <p id="dashboard-empty-state" class="empty-state">Todavía no hay recaudación registrada.</p>
+        </div>
+        <p id="dashboard-message" class="form-message" role="alert"></p>
+      </section>
+
+      <section id="peliculas" class="panel" aria-labelledby="peliculas-heading">
         <div class="section-heading">
           <div>
             <p class="eyebrow">Catálogo</p>
@@ -68,7 +113,7 @@
         </div>
       </section>
 
-      <section class="panel" aria-labelledby="entradas-heading">
+      <section id="entradas" class="panel" aria-labelledby="entradas-heading">
         <div class="section-heading">
           <div>
             <p class="eyebrow">Taquilla</p>

@@ -14,6 +14,14 @@ const entradaMessage = document.querySelector('#entrada-message');
 const entradasBody = document.querySelector('#entradas-body');
 const entradasEmptyState = document.querySelector('#entradas-empty-state');
 const ticketCount = document.querySelector('#ticket-count');
+const dashboardBody = document.querySelector('#dashboard-body');
+const dashboardEmptyState = document.querySelector('#dashboard-empty-state');
+const dashboardMessage = document.querySelector('#dashboard-message');
+const dashboardUpdated = document.querySelector('#dashboard-updated');
+const dashboardRecaudacion = document.querySelector('#dashboard-recaudacion');
+const dashboardEntradas = document.querySelector('#dashboard-entradas');
+const dashboardTopPelicula = document.querySelector('#dashboard-top-pelicula');
+const dashboardLink = document.querySelector('[data-section="dashboard"]');
 
 let peliculasTodas = [];
 let peliculasDisponibles = [];
@@ -30,6 +38,44 @@ async function obtenerEntradas() {
   const response = await fetch('/api/entradas');
   if (!response.ok) throw new Error('No se pudieron cargar las entradas.');
   return response.json();
+}
+
+async function obtenerDashboard() {
+  const response = await fetch('/api/dashboard');
+  if (!response.ok) throw new Error('No se pudieron cargar las estadísticas.');
+  return response.json();
+}
+
+function mostrarDashboard(datos) {
+  dashboardRecaudacion.textContent = `$${datos.recaudacionTotal.toFixed(2)}`;
+  dashboardEntradas.textContent = datos.cantidadTotalEntradas;
+  dashboardTopPelicula.textContent = datos.peliculaConMasEntradas
+    ? datos.peliculaConMasEntradas.titulo
+    : 'Sin ventas';
+  dashboardBody.replaceChildren();
+
+  datos.recaudacionPorPelicula.forEach((pelicula) => {
+    const fila = document.createElement('tr');
+    [pelicula.titulo, pelicula.cantidadEntradas, `$${pelicula.monto.toFixed(2)}`].forEach((valor) => {
+      const celda = document.createElement('td');
+      celda.textContent = valor;
+      fila.append(celda);
+    });
+    dashboardBody.append(fila);
+  });
+
+  dashboardEmptyState.hidden = datos.recaudacionPorPelicula.length > 0;
+  dashboardUpdated.textContent = `Actualizado ${new Date().toLocaleTimeString('es-AR')}`;
+}
+
+async function cargarDashboard() {
+  try {
+    mostrarDashboard(await obtenerDashboard());
+    dashboardMessage.textContent = '';
+  } catch (error) {
+    dashboardMessage.textContent = error.message;
+    dashboardMessage.className = 'form-message form-message-error';
+  }
 }
 
 function mostrarMensajeEntrada(mensaje = '', esError = true) {
@@ -204,6 +250,7 @@ async function guardarPelicula(event) {
   mostrarMensaje(id ? 'Película actualizada correctamente.' : 'Película agregada correctamente.', false);
   await listarPeliculas();
   await listarEntradas();
+  await cargarDashboard();
 }
 
 async function editarPelicula(id) {
@@ -279,5 +326,7 @@ entradasBody.addEventListener('click', (event) => {
   const button = event.target.closest('button');
   if (button) eliminarEntrada(button.dataset.id).catch((error) => mostrarMensajeEntrada(error.message));
 });
+
+dashboardLink.addEventListener('click', () => cargarDashboard());
 
 cargarDatosIniciales();

@@ -77,6 +77,44 @@ h1 {
   background: rgba(23, 20, 18, 0.72);
 }
 
+.section-nav {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid rgba(225, 165, 104, 0.2);
+}
+
+.nav-link {
+  padding: 0.7rem 0.9rem;
+  color: #d4c5b7;
+  font: 700 0.78rem Arial, sans-serif;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.nav-link:hover { color: #e1a568; }
+
+.dashboard-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.stat-card {
+  display: grid;
+  gap: 0.75rem;
+  min-height: 7rem;
+  padding: 1.25rem;
+  border-left: 3px solid #e1a568;
+  background: rgba(225, 165, 104, 0.08);
+  font-family: Arial, sans-serif;
+}
+
+.stat-card span { color: #d4c5b7; font-size: 0.8rem; }
+.stat-card strong { color: #fff8ef; font: 400 1.65rem Georgia, 'Times New Roman', serif; }
+.dashboard-table-heading { margin-top: 2rem; margin-bottom: 0.5rem; }
+h3 { margin: 0; color: #f0d1ad; font: 400 1.15rem Georgia, 'Times New Roman', serif; }
+
 .section-heading {
   display: flex;
   align-items: center;
@@ -266,6 +304,7 @@ td { color: #f7f1e8; }
   .page-header { align-items: start; flex-direction: column; }
   .movie-form { grid-template-columns: 1fr; }
   .ticket-form { grid-template-columns: 1fr; }
+  .dashboard-cards { grid-template-columns: 1fr; }
   .form-actions { grid-column: auto; }
 }
 

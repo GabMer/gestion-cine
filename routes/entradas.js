@@ -99,4 +99,6 @@ router.delete('/:id', (req, res) => {
   res.json({ mensaje: 'Entrada eliminada correctamente.', entrada: entradaEliminada });
 });
 
+router.obtenerEntradas = () => entradas;
+
 module.exports = router;
