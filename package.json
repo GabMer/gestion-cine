@@ -1,0 +1,23 @@
+{
+  "name": "gestion-cine",
+  "version": "1.0.0",
+  "description": "Sistema de gestión de cine con Node.js, Express y frontend vanilla",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [
+    "cine",
+    "express",
+    "nodejs"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
